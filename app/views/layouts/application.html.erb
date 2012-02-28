@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>RubyKursus2012</title>
+  <title>RoR kursus</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<%= yield %>
-
+  <div id="header">
+    <h1><a href="/">Programmeerimine Ruby on Rails raamistikus</a><h1>
+    <p>MTAT.03.267 - kevad 2012</p>
+  </div>
+  <div id="main">
+    <%= yield %>
+  </div>
+  <div id="sidebar">
+    <%= render :partial => '/layouts/sidebar' -%>
+  </div>
 </body>
 </html>
