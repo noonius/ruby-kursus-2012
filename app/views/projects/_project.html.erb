@@ -1,0 +1,5 @@
+<li>
+  <%= project.title %> (<%= project.students.collect{|s| s.name}.join(', ') %>)<br>
+  <%= project.description %><br>
+  <%= link_to "Repo", project.repo_url unless project.repo_url.nil? %>
+</li>
