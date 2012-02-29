@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RoR kursus - Praktikum 15.02.2012</title>
+    <link rel="stylesheet" type="text/css" href="/assets/application.css" media="screen">
+    <meta name="generator" content="nanoc 3.3.0">
+  </head>
+  <body>
+    <div id="header">
+      <h1><a href="/">Programmeerimine Ruby on Rails raamistikus</a><h1>
+      <p>MTAT.03.267 - kevad 2012</p>
+    </div>
+    <div id="main">
+      <h2 id="ii-praktikum-15022012">II Praktikum 15.02.2012</h2>
+
+<h3 id="funktsionaalsuse-laiendamine">Funktsionaalsuse laiendamine</h3>
+
+<p>Alustuseks üks lihtne klass</p>
+
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="k">class</span> <span class="nc">Person</span>
+  <span class="kp">attr_accessor</span> <span class="ss">:name</span><span class="p">,</span> <span class="ss">:age</span>
+  
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@name</span> <span class="o">=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:name</span><span class="o">]</span>
+    <span class="vi">@age</span> <span class="o">=</span> <span class="n">options</span><span class="o">[</span><span class="ss">:age</span><span class="o">]</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="nb">p</span> <span class="o">=</span> <span class="no">Person</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">'Albert'</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="mi">23</span><span class="p">)</span> 
+<span class="c1">#=&gt; #&lt;Person:0x007f91690330c0 @name="Albert", @age=23&gt;</span></code></pre></div>
+<p>Laiendamine pärimise teel </p>
+
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="k">class</span> <span class="nc">Worker</span> <span class="o">&lt;</span> <span class="no">Person</span>
+  <span class="kp">attr_accessor</span> <span class="ss">:job</span>
+  
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">options</span> <span class="o">=</span> <span class="p">{})</span>
+    <span class="vi">@job</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:job</span><span class="p">)</span>
+    <span class="k">super</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">Worker</span><span class="o">.</span><span class="n">ancestors</span> <span class="c1"># =&gt; [Worker, Person, Object, Kernel, BasicObject]</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="no">Worker</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">'Hubert'</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="mi">67</span><span class="p">,</span> <span class="n">job</span><span class="p">:</span> <span class="s1">'Engineer'</span><span class="p">)</span>
+<span class="c1"># =&gt; #&lt;Worker:0x007f9169954050 @job="Engineer", @name="Hubert", @age=67&gt;</span></code></pre></div>
+<p>Lihtsast pärimisest on rohkem levinud funktsionaalsuse lisamine moodulite (<em>mixin</em>) abil.</p>
+
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="k">module</span> <span class="nn">Employee</span>
+  <span class="k">def</span> <span class="nf">salary</span>
+    <span class="vi">@salary</span>
+  <span class="k">end</span>
+  
+  <span class="k">def</span> <span class="nf">salary</span><span class="o">=</span><span class="p">(</span><span class="n">salary</span><span class="p">)</span>
+    <span class="vi">@salary</span> <span class="o">=</span> <span class="n">salary</span>
+  <span class="k">end</span>
+  
+  <span class="k">def</span> <span class="nf">on_payroll?</span>
+    <span class="o">!!</span><span class="vi">@salary</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="nc">Worker</span>
+  <span class="kp">include</span> <span class="no">Employee</span>
+<span class="k">end</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="no">Worker</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">'Hubert'</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="mi">67</span><span class="p">,</span> <span class="n">job</span><span class="p">:</span> <span class="s1">'Engineer'</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">salary</span> <span class="c1"># =&gt; nil</span>
+<span class="n">w</span><span class="o">.</span><span class="n">on_payroll?</span> <span class="c1">#=&gt; false</span>
+<span class="n">w</span><span class="o">.</span><span class="n">salary</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1">#=&gt; 1000</span>
+<span class="n">w</span><span class="o">.</span><span class="n">on_payroll?</span> <span class="c1"># =&gt; true</span></code></pre></div>
+<p>### Koodiplokid</p>
+
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="o">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="o">].</span><span class="n">each</span> <span class="p">{</span><span class="o">|</span><span class="n">v</span><span class="o">|</span> <span class="nb">puts</span>  <span class="n">v</span><span class="o">.</span><span class="n">upcase</span><span class="p">}</span>
+
+<span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="s1">'A'</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="s1">'B'</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="s1">'C'</span><span class="p">}</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"Key: </span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2">, value: </span><span class="si">#{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span></code></pre></div>
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="k">def</span> <span class="nf">call_block</span>
+  <span class="k">yield</span>
+<span class="k">end</span>
+
+<span class="n">call_block</span>
+  <span class="k">yield</span>
+<span class="k">end</span>
+
+<span class="n">call_block</span> <span class="c1"># Error: no block given (yield)</span>
+<span class="n">call_block</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s2">"Code inside a block"</span> <span class="p">}</span><span class="n">_</span></code></pre></div>
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="k">def</span> <span class="nf">call_block</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="k">yield</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+<span class="k">end</span></code></pre></div>
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="k">def</span> <span class="nf">call_block</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+  <span class="n">block</span><span class="o">.</span><span class="n">call</span>
+<span class="k">end</span></code></pre></div>
+<p><a href="http://ruby-doc.org/core-1.9.3/Enumerable.html">Enumerable</a></p>
+
+<div class="code-container"><pre class="highlight"><code class="language-ruby"><span class="k">class</span> <span class="nc">Family</span>
+  <span class="kp">include</span> <span class="no">Enumerable</span>
+
+  <span class="k">def</span> <span class="nf">initialize</span>
+    <span class="vi">@dad</span> <span class="o">=</span> <span class="s1">'Dad'</span>
+    <span class="vi">@mom</span> <span class="o">=</span> <span class="s1">'Mom'</span>
+    <span class="vi">@son</span> <span class="o">=</span> <span class="s1">'Son'</span>
+    <span class="vi">@daugther</span> <span class="o">=</span> <span class="s1">'Daughter'</span>
+  <span class="k">end</span>
+  
+  <span class="k">def</span> <span class="nf">each</span>
+    <span class="k">yield</span> <span class="vi">@dad</span>
+    <span class="k">yield</span> <span class="vi">@mom</span>
+    <span class="k">yield</span> <span class="vi">@son</span>
+    <span class="k">yield</span> <span class="vi">@daugther</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="no">Family</span><span class="o">.</span><span class="n">new</span> 
+<span class="c1"># =&gt; #&lt;Family:0x007f91698ee570 @dad="Dad", @mom="Mom", @son="Son", @daugther="Daughter"&gt;</span>
+<span class="n">f</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">'Mom'</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+<span class="n">f</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">'Uncle'</span><span class="p">)</span> <span class="c1"># =&gt; false</span>
+<span class="n">f</span><span class="o">.</span><span class="n">count</span> <span class="c1"># =&gt; 4</span>
+<span class="n">f</span><span class="o">.</span><span class="n">first</span> <span class="c1"># =&gt; "Dad"</span></code></pre></div>
+    </div>
+    <div id="sidebar">
+      <h2>Praktikumid</h2>
+<ul>
+  <li><a href="/2012-02-08/">8.02.2011</a></li>
+  <li><a href="/2012-02-15/">15.02.2011</a></li>
+  <li><a href="/2012-02-21/">21.02.2011</a></li>
+</ul>
+<h2>----</h2>
+<ul>
+  <li><a href="/projektid/">Projektid</a></li>
+</ul>
+
+<h2></h2>
+<ul>
+  <li><a href="/lisamaterjalid/">Lisamaterjalid</a></li>
+</ul>
+    </div>
+  </body>
+</html>
