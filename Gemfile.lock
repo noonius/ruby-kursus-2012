@@ -1,3 +1,14 @@
+GIT
+  remote: git@github.com:rawongithub/minitest-rails.git
+  revision: b8997a7044b41d4c372b7a071927f376864b8104
+  branch: gemspec
+  specs:
+    minitest-rails (0.0.5)
+      actionpack (~> 3.1)
+      activesupport (~> 3.1)
+      minitest (~> 2.10)
+      railties (~> 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -52,6 +63,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.17.2)
+    minitest (2.11.3)
     multi_json (1.1.0)
     polyglot (0.3.3)
     rack (1.4.1)
@@ -105,6 +117,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   jquery-rails
+  minitest-rails!
   rails (= 3.2.1)
   sass-rails (~> 3.2.3)
   sqlite3
