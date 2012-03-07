@@ -1,5 +1,9 @@
-<li>
-  <%= project.title %> (<%= project.students.collect{|s| s.name}.join(', ') %>)<br>
-  <%= project.description %><br>
-  <%= link_to "Repo", project.repo_url unless project.repo_url.nil? %>
-</li>
+<div class="project">
+  <h3><%= project.title %></h3>
+  <span id="authors"><%= project.students.collect{|s| s.name}.join(', ') %></span><br>
+  <span id="desc"><%= project.description %></span><br>
+  <% unless project.repo_url.nil? %>
+  <%= link_to "Repo", project.repo_url %>
+  <% end %>
+  <%= link_to 'Modify', edit_project_path(project) %>
+</div><br>
