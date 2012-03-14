@@ -12,6 +12,12 @@
   <li>API väljund (JSON, XML)</li>
   <li>Deploy</li>
 </ul>
+
+<h3 id="valitud-teemad">Valitud projekti teemad</h3>
+<ul>
+  <%= render :partial => @projects %>
+</ul>
+
 <h3 id="meie-poolt-pakutavad-projekti-teemad">Meie poolt pakutavad projekti teemad</h3>
 <ul>
   <li>Oksjon</li>
@@ -23,8 +29,4 @@
   <li>Foorum / e-posti list</li>
   <li>E-valimised</li>
   <li>…</li>
-</ul>
-<h3 id="valitud-teemad">Valitud projekti teemad</h3>
-<ul>
-<%= render :partial => @projects %>
 </ul>
