@@ -559,3 +559,13 @@ div.field, div.actions {
   font-size: 12px;
   list-style: square;
 }
+
+span#desc {
+  font-style: italic;
+  font-size: 0.9em;
+  color: gray;
+}
+
+li.project {
+  margin-bottom: 24px;
+}
