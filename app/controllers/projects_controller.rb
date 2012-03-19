@@ -1,10 +1,13 @@
 class ProjectsController < ApplicationController
+  #before_filter :edit, :update, :only => :admin
+  
   def index
     @projects = Project.all
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @projects }
+      format.json { render :json => @projects }
     end
   end
   
