@@ -9,6 +9,8 @@ gem 'sqlite3'
 
 gem 'coderay'
 
+gem 'twitter-bootstrap-rails', :git => 'http://github.com/seyhunak/twitter-bootstrap-rails.git'
+
 group :test, :development do
   gem 'minitest-rails',
       :git => "git@github.com:rawongithub/minitest-rails.git",
